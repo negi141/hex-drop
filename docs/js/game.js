@@ -24,11 +24,11 @@ export class Game {
         element: document.body,
         engine: engine,
         options: {
-            width: 800,
-            height: 600,
+            width: 375,
+            height: 667,
             //showAngleIndicator: true,
             wireframes: false,
-            background: '#223344'
+            background: '#223344',
         }
     });
 
@@ -104,7 +104,7 @@ export class Game {
         let x = tmpBody.vertices[0].x;
         let y = tmpBody.vertices[0].y;
         //Body.translate(tmpBody, {x: 400-x, y: 200-y});
-        Body.translate(tmpBody, {x: 400-x+b.x * size, y: 330-y+b.y * size});
+        Body.translate(tmpBody, {x: 200-x+b.x * size, y: 230-y+b.y * size});
         blocks.push(tmpBody);      
     });
     console.log(blocks);
@@ -115,7 +115,7 @@ export class Game {
     friction: 8, // 摩擦
     label: 'facebook',
     angle: Math.random() * 10,*/
-    let hex = Bodies.polygon(400, 100, 6, 60, 
+    let hex = Bodies.polygon(200, 100, 6, 60, 
         {
             label: 'hex', 
             density: 0.000005, restitution: 0.000000001,
@@ -134,9 +134,9 @@ export class Game {
 
     Composite.add(world, [
         // walls
-        Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
-        Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
-        Bodies.rectangle(0, 300, 50, 600, { isStatic: true }),
+        //Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
+        //Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
+        //Bodies.rectangle(0, 300, 50, 600, { isStatic: true }),
         Bodies.rectangle(400, 609, 800, 50, { isStatic: true }),
         hex
     ]);    
@@ -153,7 +153,7 @@ export class Game {
             }
         });
 
-    render.canvas.addEventListener('click', () => {
+    render.canvas.addEventListener('touchend', () => {
         const query = Query.point(Composite.allBodies(world), mouse.position)
         console.log(mouse.position);
         console.log(query);
