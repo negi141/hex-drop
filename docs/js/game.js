@@ -109,7 +109,7 @@ export class Game {
         let x = tmpBody.vertices[0].x;
         let y = tmpBody.vertices[0].y;
         //Body.translate(tmpBody, {x: 400-x, y: 200-y});
-        Body.translate(tmpBody, {x: 200-x+b.x * size, y: 180-y+b.y * size});
+        Body.translate(tmpBody, {x: 200-x+b.x * size, y: -40-y+b.y * size});
         blocks.push(tmpBody);      
     });
     console.log(blocks);
@@ -120,7 +120,7 @@ export class Game {
     friction: 8, // 摩擦
     label: 'facebook',
     angle: Math.random() * 10,*/
-    let hex = Bodies.polygon(250, 100, 6, 60, 
+    let hex = Bodies.polygon(250, -140, 6, 60, 
         {
             label: 'hex', 
             density: 0.000005, restitution: 0.000000001,
@@ -132,8 +132,7 @@ export class Game {
             }
         }
     );
-
- //   Body.rotate(hex, Math.PI/6);
+    Body.rotate(hex, Math.PI/6);
 
     let blocksComposite = Composite.add(world, blocks);
 
@@ -142,7 +141,7 @@ export class Game {
         //Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
         //Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
         //Bodies.rectangle(0, 300, 50, 600, { isStatic: true }),
-        Bodies.rectangle(400, 609, 800, 50, { isStatic: true }),
+        Bodies.rectangle(400, 400, 800, 50, { isStatic: true }),
         hex
     ]);    
 
