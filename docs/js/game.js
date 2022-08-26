@@ -134,10 +134,11 @@ export class Game {
     );
     Body.rotate(hex, Math.PI/6);
 
-    let blocksComposite = Composite.add(world, blocks);
+    // Blocks
+    Composite.add(world, blocks);
 
-    Composite.add(world, [
-        // walls
+    // Walls
+    let composite = Composite.add(world, [
         //Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
         //Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
         //Bodies.rectangle(0, 300, 50, 600, { isStatic: true }),
@@ -146,27 +147,41 @@ export class Game {
     ]);    
 
     // add mouse control
-    var mouse = Mouse.create(render.canvas),
-        mouseConstraint = MouseConstraint.create(engine, {
-            mouse: mouse,
-            constraint: {
-                stiffness: 0.2,
-                render: {
-                    visible: false
-                }
-            }
-        });
+    var mouse = Mouse.create(render.canvas);
 
+    const startTime = performance.now(); // 開始時間
+
+    // Fail / Clear Check
+    const interval = 1000;
+    const checkTimer = setInterval(() => {
+        if (hex.position.x < 140 || hex.position.x > 400) {
+            clearInterval(checkTimer);
+            alert("失敗！　リトライします。");
+            window.location.reload();
+            return;
+        }
+
+        console.log(composite.bodies);
+        if (composite.bodies.length == 2) {
+            const endTime = performance.now(); // 終了時間
+            let clearTime = endTime - startTime;
+            let date = new Date(clearTime);
+            clearInterval(checkTimer);
+            alert("成功！！！" + date.getMinutes() + "分" + date.getSeconds() + "秒");
+            return;
+        }
+
+    }, interval);
     render.canvas.addEventListener('touchend', () => {
         const query = Query.point(Composite.allBodies(world), mouse.position)
         console.log(mouse.position);
         console.log(query);
         if (query.length > 0 && query[0].label == 'Body'){console.log("!!")
-            Composite.remove(blocksComposite, query[0]);
+            Composite.remove(composite, query[0]);
         }
         });
 
-    Composite.add(world, mouseConstraint);
+    //Composite.add(world, mouseConstraint);
 
     // keep the mouse in sync with rendering
     render.mouse = mouse;
