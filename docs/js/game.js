@@ -1,6 +1,6 @@
 
 export class Game {
-    constructor() {
+    constructor(ui) {
 
     var Engine = Matter.Engine,
         Render = Matter.Render,
@@ -28,7 +28,7 @@ export class Game {
             height: 867,
             //showAngleIndicator: true,
             wireframes: false,
-            background: '#223344',
+            background: '#aaccff',
         }
     });
 
@@ -85,15 +85,21 @@ export class Game {
         {id: 4, rot:0, x: -1, y:3},
         {id: 5, rot:0, x: 3, y:5},
         {id: 0, rot:0, x: 1, y:3},
-        {id: 1, rot:0, x: -1, y:6},
-        {id: 1, rot:0, x: 1, y:6},
-        {id: 4, rot:0, x: 2, y:7},
-        {id: 5, rot:0, x: 2, y:9},
-        {id: 0, rot:0, x: 0, y:7},
+
+        {id: 1, rot:0, x: -1, y:5},
+        {id: 1, rot:0, x: 1, y:5},
+        {id: 4, rot:0, x: 2, y:6},
+        {id: 5, rot:0, x: 2, y:8},
+        {id: 0, rot:0, x: 0, y:6},
+        
+        {id: 0, rot:0, x: -1, y:8},
+        {id: 0, rot:0, x: 0, y:8},
+        {id: 0, rot:0, x: 1, y:8},
+        {id: 0, rot:0, x: 2, y:8},
     ];
 
     
-    var blocks = [];
+    let blocks = [];
     layout.forEach(b => {
         let tmpBody = Bodies.fromVertices(
             0, 0, blockTemplates[b.id].vert, 
@@ -108,11 +114,12 @@ export class Game {
         console.log(tmpBody.vertices[0]);
         let x = tmpBody.vertices[0].x;
         let y = tmpBody.vertices[0].y;
-        //Body.translate(tmpBody, {x: 400-x, y: 200-y});
-        Body.translate(tmpBody, {x: 200-x+b.x * size, y: -40-y+b.y * size});
+        Body.translate(tmpBody, {x: 200-x+b.x * size, y: -2-y+b.y * size});
         blocks.push(tmpBody);      
     });
-    console.log(blocks);
+
+    // Blocks
+    Composite.add(world, blocks);
 
 /*    density: 5, // 密度
     frictionAir: 0.001, // 空気抵抗
@@ -120,7 +127,8 @@ export class Game {
     friction: 8, // 摩擦
     label: 'facebook',
     angle: Math.random() * 10,*/
-    let hex = Bodies.polygon(250, -140, 6, 60, 
+    // キャラクター：六角形
+    let hex = Bodies.polygon(250, -60, 6, 60, 
         {
             label: 'hex', 
             density: 0.000005, restitution: 0.000000001,
@@ -134,15 +142,15 @@ export class Game {
     );
     Body.rotate(hex, Math.PI/6);
 
-    // Blocks
-    Composite.add(world, blocks);
-
     // Walls
     let composite = Composite.add(world, [
         //Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
         //Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
         //Bodies.rectangle(0, 300, 50, 600, { isStatic: true }),
-        Bodies.rectangle(400, 400, 800, 50, { isStatic: true }),
+        Bodies.rectangle(250, 600, 250, 300, { isStatic: true,
+            render: {
+                fillStyle: "#B50"
+        }}),
         hex
     ]);    
 
@@ -151,32 +159,47 @@ export class Game {
 
     const startTime = performance.now(); // 開始時間
 
+
     // Fail / Clear Check
-    const interval = 1000;
-    const checkTimer = setInterval(() => {
+    const gameStateTimerInterval = 1000;
+    const gameStateTimer = setInterval(() => {
         if (hex.position.x < 140 || hex.position.x > 400) {
-            clearInterval(checkTimer);
-            alert("失敗！　リトライします。");
-            window.location.reload();
+            clearInterval(gameStateTimer);
+                    
+            ui.showDialog("失敗！", "リトライ", function(){
+                window.location.reload();
+            });
             return;
         }
 
-        console.log(composite.bodies);
         if (composite.bodies.length == 2) {
             const endTime = performance.now(); // 終了時間
             let clearTime = endTime - startTime;
             let date = new Date(clearTime);
-            clearInterval(checkTimer);
-            alert("成功！！！" + date.getMinutes() + "分" + date.getSeconds() + "秒");
+            clearInterval(gameStateTimer);
+
+            ui.showDialog("成功！！！" + date.getMinutes() + "分" + date.getSeconds() + "秒", "リトライ", function(){
+                window.location.reload();
+            });
             return;
         }
 
-    }, interval);
+    }, gameStateTimerInterval);
+
+    /*
+    const hexPosTimerInterval = 100;
+    const hexPosTimer = setInterval(() => {
+        
+    }, checkTimerInterval);*/
+let score = 0;
+ui.setScore(score);
     render.canvas.addEventListener('touchend', () => {
         const query = Query.point(Composite.allBodies(world), mouse.position)
         console.log(mouse.position);
         console.log(query);
-        if (query.length > 0 && query[0].label == 'Body'){console.log("!!")
+        if (query.length > 0 && query[0].label == 'Body'){
+            score++;
+            ui.setScore(score);
             Composite.remove(composite, query[0]);
         }
         });

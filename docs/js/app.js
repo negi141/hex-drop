@@ -1,3 +1,6 @@
 import { Game } from './game.js'
+import { UI } from './ui.js'
 
-let m = new Game()
+let ui = new UI()
+
+let m = new Game(ui)
