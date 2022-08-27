@@ -13,7 +13,7 @@ export class UI {
 
     // messeage
     setScore(score) {
-        this.scoreElm.innerText = "SCORE: " + score;
+        this.scoreElm.innerHTML = "<span>◆</span> " + score;
     }
 
     // dialog

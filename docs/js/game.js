@@ -186,13 +186,23 @@ export class Game {
 
     }, gameStateTimerInterval);
 
+    /*setInterval(() => {
+        let allBodies = Composite.allBodies(world);
+        allBodies.forEach(b => {
+            //b.velocity.x = b.velocity.y = 0;
+            b.velocity.x = b.velocity.y = 0;
+        });
+        console.log(Composite.allBodies(world));
+        
+    }, 1000);*/
     /*
     const hexPosTimerInterval = 100;
     const hexPosTimer = setInterval(() => {
         
     }, checkTimerInterval);*/
-let score = 0;
-ui.setScore(score);
+    let score = 0;
+    ui.setScore(score);
+
     render.canvas.addEventListener('touchend', () => {
         const query = Query.point(Composite.allBodies(world), mouse.position)
         console.log(mouse.position);
@@ -201,8 +211,9 @@ ui.setScore(score);
             score++;
             ui.setScore(score);
             Composite.remove(composite, query[0]);
+            console.log(query[0]);
         }
-        });
+    });
 
     //Composite.add(world, mouseConstraint);
 

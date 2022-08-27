@@ -121,12 +121,16 @@ h1 {
     border: none;
     z-index: 1000;
     /*box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);*/
-    font-size: 13px;
+    font-size: 15px;
+    font-weight: bold;
   
     transition-property: opacity; 
     transition-duration: 0.8s;
   
     top: 10px;
+  }
+  .score-holder>span{
+      color: rgb(55, 212, 108);
   }
 
 .dialog-holder {
@@ -149,14 +153,17 @@ h1 {
 }
 .dialog-button {
     padding: 5px 27px;
-    background: #11aa33;
+    background: #22bb44;
     color: #fff;
     font-weight: bold;
+    font-size: 17px;
+    border: solid 1px #173;
     border-radius: 8px;
+    border-bottom: solid 4px #173;
 }
 .dialog-message {
     font-size: 24px;
-    color: #33f;
+    color: #47d;
     font-weight: bold;
     }
 
